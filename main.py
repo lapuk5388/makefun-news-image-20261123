@@ -1,76 +1,76 @@
 #!/usr/bin/env python3
-"""THE LONG DAY POST — entry program for news-image-20261123 (Final 6).
+"""THE LONG DAY POST — Final 6 delivery program, news-image-20261123.
 
-The Long Day Post is a one-page newspaper front page that sums up Monday
-23 November 2026 in 40 stories: a 12-card illustrated main grid led by the
-US release of declassified UFO footage, a dotted world map with numbered
-pins, a UTC timeline, an ALSO ON column and a red DATE CHECK box that
-names six older stories and keeps them out of the news.
+Front page of THE LONG DAY POST for Monday 23 November 2026: forty stories
+on a single sheet, twelve illustrated cards up front (the lead being the
+US release of more UFO footage), a pinned world map, a UTC timeline strip,
+an ALSO ON rail and the red DATE CHECK box that keeps six older items out
+of the day's news.
 
-This program is the delivery vehicle for that page. It uses only the
-Python standard library (hashlib, os, sys), performs no drawing at all,
-and simply copies the finished entry.png sitting next to it into the
-output directory named by MAKEFUN_OUTPUT_DIR (default /output). Before
-copying, it checks the PNG magic bytes, the 1 MiB competition ceiling
-and the exact expected size of the shipped page, so a swapped or
-truncated file fails loudly instead of submitting the wrong image.
-Running it twice produces byte-identical output.
+This little program does no rendering whatsoever. The finished page lives
+beside it as entry.png; all the program does is verify that file — PNG
+signature, exact byte count, exact SHA-256 — and then copy it, untouched,
+into MAKEFUN_OUTPUT_DIR (falling back to /output). Verification first,
+copy second, so a corrupted or swapped page aborts the run instead of
+quietly shipping the wrong front page. Two runs, same bytes out.
 """
 
 import hashlib
 import os
 import sys
 
-EXPECTED_BYTES = 280616
-EXPECTED_SHA256 = "62f204efff0663fdd5fac35369dbc61fb2a4dafb8174c9c063621a90da1f2b39"
+# The shipped page, pinned. Both numbers come from the verified entry.png
+# that sits next to this file in the repository.
+PAGE_BYTES = 280616
+PAGE_SHA256 = "62f204efff0663fdd5fac35369dbc61fb2a4dafb8174c9c063621a90da1f2b39"
 
-PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
-MAX_BYTES = 1048576  # 1 MiB competition ceiling
-
-
-def load_entry():
-    here = os.path.dirname(os.path.abspath(__file__))
-    src = os.path.join(here, "entry.png")
-    with open(src, "rb") as fh:
-        return fh.read()
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+CEILING = 1024 * 1024  # competition cap: one mebibyte
 
 
-def check_entry(data):
-    if not data:
-        sys.exit("entry.png is empty")
-    if data[:8] != PNG_MAGIC:
-        sys.exit("entry.png is not a PNG (bad magic bytes)")
-    if len(data) > MAX_BYTES:
-        sys.exit("entry.png exceeds 1 MiB: %d bytes" % len(data))
-    if len(data) != EXPECTED_BYTES:
-        sys.exit("entry.png size changed: %d bytes, expected %d"
-                 % (len(data), EXPECTED_BYTES))
+def read_page():
+    folder = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(folder, "entry.png")
+    with open(path, "rb") as handle:
+        return handle.read()
 
 
-def check_digest(data):
-    """Second, independent guard: the page must hash to the recorded value.
+def verify(blob):
+    """Refuse anything that is not exactly the intended page.
 
-    Size alone cannot tell two different 280,616-byte files apart, so the
-    SHA-256 of the shipped page is pinned as well. A mismatch means the
-    entry.png on disk is not the page that won the variant duel.
+    Three independent checks, cheapest first: the eight-byte PNG
+    signature, the byte count against both the competition ceiling and
+    the pinned size, and finally the full SHA-256 digest.
     """
-    digest = hashlib.sha256(data).hexdigest()
-    if digest != EXPECTED_SHA256:
-        sys.exit("entry.png sha256 changed: %s, expected %s"
-                 % (digest, EXPECTED_SHA256))
+    if len(blob) == 0:
+        sys.exit("entry.png: file is empty")
+    if blob[:8] != PNG_SIGNATURE:
+        sys.exit("entry.png: missing PNG signature")
+    if len(blob) > CEILING:
+        sys.exit("entry.png: %d bytes over the 1 MiB cap" % len(blob))
+    if len(blob) != PAGE_BYTES:
+        sys.exit("entry.png: got %d bytes, want %d" % (len(blob), PAGE_BYTES))
+    digest = hashlib.sha256(blob).hexdigest()
+    if digest != PAGE_SHA256:
+        sys.exit("entry.png: sha256 %s does not match %s" % (digest, PAGE_SHA256))
     return digest
 
 
+def deliver(blob):
+    target_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
+    os.makedirs(target_dir, exist_ok=True)
+    target = os.path.join(target_dir, "entry.png")
+    with open(target, "wb") as handle:
+        handle.write(blob)
+    return target
+
+
 def main():
-    data = load_entry()
-    check_entry(data)
-    digest = check_digest(data)
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
-    os.makedirs(out_dir, exist_ok=True)
-    dst = os.path.join(out_dir, "entry.png")
-    with open(dst, "wb") as fh:
-        fh.write(data)
-    sys.stderr.write("entry.png: %d bytes sha256=%s\n" % (len(data), digest))
+    blob = read_page()
+    digest = verify(blob)
+    target = deliver(blob)
+    sys.stderr.write("wrote %s (%d bytes, sha256 %s)\n"
+                     % (target, len(blob), digest))
 
 
 if __name__ == "__main__":
