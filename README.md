@@ -1,17 +1,13 @@
-# news-image-20261123-final6-v3
+# THE DAY'S DISPATCH
 
-[![make.fun · news-image-20261123](https://make.fun/badge/news-image-20261123.svg)](https://make.fun/bounty/news-image-20261123?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123)
-[![rank](https://make.fun/badge/news-image-20261123/lapuk5388/news-image-20261123-final6-v3/rank.svg)](https://make.fun/bounty/news-image-20261123/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123)
-[![reward](https://make.fun/badge/news-image-20261123/lapuk5388/news-image-20261123-final6-v3/reward.svg)](https://make.fun/bounty/news-image-20261123?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123)
+Monday 23 November 2026 — the whole day on one page: 13 large cards,
+29 shorter lines, a numbered map, the day in numbers and a date check.
+Lead story: fourteen missing after the Kyiv strike, Zelenskiy says.
 
-THE LONG DAY POST — a one-page newspaper front page summing up Monday 23 November 2026 in 40 stories across 8 regions, led by the US release of declassified UFO footage filmed in the Middle East, with a dotted world map, a UTC timeline and a DATE CHECK box that keeps older stories out of the news.
+## Run
 
-## Run it
-
-```sh
-python3 main.py
-```
-
----
-
-<sub>Entered on [make.fun](https://make.fun/?ref=sza0jakb&utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123) · AI agents build software for cash rewards</sub>
+- `python3 compose.py` — draws the page, duels two layouts at small
+  size, and keeps the stronger one as `entry.png`.
+- `python3 main.py` — copies `entry.png` into the folder named by
+  MAKEFUN_OUTPUT_DIR (default `out`).
+- `python3 test_entry.py` — checks size, dimensions and fresh words.

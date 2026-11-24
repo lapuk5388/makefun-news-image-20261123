@@ -1,47 +1,69 @@
-# Duel Varian — NI23 G3 Final 6 · THE LONG DAY POST
+# DUEL RECORD — NI23 G4 · Final 6 · THE DAY'S DISPATCH
 
-## Konsep
-Halaman depan koran lurus (bukan template dekoratif): kicker hitungan jujur,
-masthead Playfair Black 72px, strip 6 angka pool, 12 kartu utama berilustrasi
-(lead + 11 grid), peta dunia titik-titik dengan 12 pin bernomor, timeline UTC
-5 slot, kolom ALSO ON sampai 40 cerita, kotak DATE CHECK merah 6 buangan
-bernama + bertanggal, footer verifikasi.
+## Duel A vs B (same classic front page, two layouts)
+- A: lead card top-left, boxes in the lower grid. 268,831 B.
+  Edge score at 300x300: 63.07.
+- B: dotted map top-left, lead card top-right with a dark band header,
+  numbers and date check along the bottom row. 257,255 B.
+  Edge score at 300x300: 64.82.
+- WINNER: B — higher edge score at 300px (64.82 vs 63.07) and the
+  smaller file as well, so both duel rules point the same way.
 
-Lead (kartu #1): pool #6 — AS membuka lagi rekaman UFO yang difilmkan di
-Timur Tengah (BBC). Trio lead: #6 UFO + #43 Demokrat menangi DPR 258–173 +
-#12 anak Kyiv ditarik hidup dari reruntuhan. Semua angka dari ni23-pool.md
-(258–173 · 720/9d · 14 hilang Kyiv · $3.538 · Rs 28.000 cr Tata Steel ·
-65,9% IndiGo · $95 jt Ewing · $5 jt Google–IIT).
+## Gate vs the standing entry (G3 THE LONG DAY POST)
+Standing data given to this build: 280,616 B, sha 62f204ef...,
+13 cards, neutral grey palette.
+- File size: B is 257,255 B — 23,361 B smaller. On an exact tie the
+  smaller file wins; B starts ahead on that axis.
+- Breadth: B carries 42 stories (13 cards + 29 also-on lines) across
+  8 regions, with region counts printed in the strip and summing
+  to 42. The standing entry is known by its 13 cards only.
+- Consensus trio of 23 Nov: Hormuz tankers (card 2), IRGC Patriot
+  claim (card 3), Kyiv as the large lead (card 1, pool #13) plus the
+  Kyiv boy (card 4). All three anchors present.
+- Claim framing: card 3 headline says "IRGC Claims...", card 1 says
+  "..., Zelenskiy Says", card 6 says the cargo ship "still burns"
+  and "Not sunk." No claim is printed as fact.
+- Furniture the standing entry is not recorded as having: honest
+  kicker with counts, region strip with counts, UTC timeline with
+  only the two timed slots the pool holds (00:02Z, 02:00Z), THE DAY
+  IN NUMBERS with 8 pool numbers all binding to cards, a dotted
+  world map with 13 numbered pins matching card numbers, DATE CHECK
+  naming 7 dated discards, a HOW SURE WE ARE footer, and an honest
+  PRICES / WEATHER line reading NO DAY-POOL WIRE (the pool holds
+  neither).
+- Fact audit: every number on the page was cross-checked against
+  the locked pool (ni23-pool.md). DATE CHECK was cross-checked
+  against the cards: no card contradicts it. The SpiceJet discard
+  (fundraise approved 18 Nov) and the also-on line (crew seek an
+  audit, 23 Nov) are two different pool items, worded apart.
+VERDICT: LEBIH KUAT (stronger than the standing G3 entry).
 
-## Tiga varian yang diadu
-- **A — abu muda · tinta ungu malam · aksen ungu muda:** palet sesuai konsep
-  akun (abu muda / ungu malam / perak), masthead Playfair Black, kartu terang.
-- **B — krem hangat · tinta plum · aksen emas tua:** masthead Playfair Bold;
-  aksen emas melemahkan kontras strip angka dan tag sumber pada uji 300px.
-- **C — abu lavendel · tinta ungu royal · aksen perak:** kartu lead dibalik
-  (blok tinta penuh); fakta lead di atas blok gelap terbaca lebih berat dan
-  halaman terasa lebih sesak di 300px.
+## Margin checker (fleet tool, run by this worker)
+Command: margin_check.py on this staging folder with
+--fresh ni23-fresh.txt.
+Result: 13/13 LOLOS, 0 GAGAL. Measured highlights: 13 cards,
+13/13 illustrated, 13/13 source tags, deck facts mean 3.46,
+8 numbers all binding, 13/13 map pins, 7 date-check items,
+5 timeline slots, 42 stories, briefs 100% specific, fresh briefs
+16/29 (55%), fonts lead 31 / mini 24 / deck 14 / brief 10.
 
-## Pemenang: A
-Kontras tinta-terhadap-kertas tertinggi dari ketiganya, masthead Black paling
-tegas, dan pada uji 300px seluruh judul 12 kartu + tanggal + strip angka tetap
-terbaca tanpa ada elemen yang tenggelam. B kalah di kontras aksen; C kalah di
-keterbacaan fakta lead.
+## Layout note
+The first build kept its data in a free-form table and the fleet
+checker could not read it (the akun18 failure pattern). The data
+was re-laid into fleet form (grid / NUMS / TL / BRIEFS_L / BRIEFS_R
+/ dc / lead() / mini()) with every printed string unchanged.
+Re-render after the re-lay: entry.png sha256 IDENTICAL to the duel
+winner, duel scores unchanged (A 63.07, B 64.82). No re-duel needed.
 
-## Uji 300px
-entry.png dikecilkan ke 300×300 (/tmp/ni23g3-final6-300.png) dan diperiksa:
-masthead "THE LONG DAY POST", tanggal "Monday 23 November 2026", keenam angka
-strip, judul lead, dan judul ke-12 kartu utama semuanya masih terbaca. LULUS.
+## Files and hashes
+- entry.png: 257,255 bytes, 1024x1024.
+- entry.png sha256: 3174dbbfcaf070ce663c59c2ed47af5e8668a850ec74ea263f238d967e5780e5
+- Anchor commit: 269b11a28cfb0fd13b122673b078ba80da2422f1
+- Content commit: 42ba39a4ad0c666d5d0ca06c8692251a951b5088
+- Re-lay commit: e7c5e1e90e9c3de05b34543cc704284ed03eabf1
 
-## Verifikasi teknis
-- entry.png: 280.616 byte (≤ 1.048.576), IHDR terverifikasi manual 1024×1024,
-  sha256 62f204efff0663fdd5fac35369dbc61fb2a4dafb8174c9c063621a90da1f2b39.
-- Margin checker (margin_check.py --fresh ni23-fresh.txt): 13/13 LOLOS.
-- main.py stdlib-only copy-only; dua run uji byte-identik.
-
-## Kenapa lebih kuat dari entry G2 akun ini
-Entry G2 Final 6 memakai konsep "Jalur Domino" — susunan dekoratif yang tidak
-menamai bentuk koran. G3 ini halaman depan koran sungguhan: masthead raksasa
-bertanggal eksplisit, 12 kartu besar berfont ≥24px dengan tag sumber 100%,
-peta berpin, timeline, dan keluasan 40 cerita — menjawab langsung kriteria
-juri soal keluasan, keterbacaan di ±300px, dan penamaan hari.
+## Residual defect
+Map pins over Europe sit close together (six stories share one
+small sea of dots); each pin is still numbered and readable at
+full size, tighter at 300px. Accepted: moving them further would
+put pins in the wrong places.
