@@ -1,3 +1,8 @@
+"""THE DAY'S DISPATCH — NI23 G4 entry for Final 6.
+
+Stdlib-only, copy-only: copies the bundled entry.png to the
+output directory named by MAKEFUN_OUTPUT_DIR (default ./out).
+"""
 import os
 import shutil
 import sys
